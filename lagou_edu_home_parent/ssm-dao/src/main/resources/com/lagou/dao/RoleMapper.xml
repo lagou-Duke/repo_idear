@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lagou.dao.RoleMapper">
+
+<!--    查询所有角色（附加条件查询）-->
+    <select id="findAllRole" parameterType="com.lagou.domain.Role" resultType="com.lagou.domain.Role">
+        select * from roles
+        <where>
+            <if test="name !=null and name !=''">
+                and name =#{name}
+            </if>
+        </where>
+    </select>
+
+    <!--    根据角色id 查询出对应的菜单信息  public List<Integer> findMenuByRoleId(Integer roleId);-->
+
+    <select id="findMenuByRoleId" resultType="int" parameterType="int">
+        SELECT m.`id`FROM roles r LEFT JOIN role_menu_relation rm ON r.id =rm.`role_id`
+        LEFT JOIN menu m ON rm.`menu_id` = m.`id`
+        WHERE r.id = #{id}
+    </select>
+
+
+<!--    新建角色  (自行完成)-->
+    <insert id="saveRole" parameterType="com.lagou.domain.Role">
+        INSERT INTO roles VALUES(NULL,#{code},#{name},#{description},#{createdTime},
+        #{updatedTime},#{createdBy},#{updatedBy});
+
+    </insert>
+
+<!--    修改角色  (自行完成)-->
+    <update id="updateRole" parameterType="com.lagou.domain.Role">
+        update roles
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null and code != ''">
+                code = #{code},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime},
+            </if>
+        </trim>
+        <where>
+            <if test="id != null and id != '' ">id = #{id}</if>
+        </where>
+    </update>
+
+<!--    清空之前选择的菜单选项-->
+
+    <delete id="deleteRoleContextMenu" parameterType="int">
+        delete from role_menu_relation where role_id = #{id}
+    </delete>
+
+<!--    添加菜单选项-->
+    <insert id="roleContextMenu" parameterType="com.lagou.domain.Role_menu_relation">
+
+        insert into role_menu_relation values(null,#{menuId},#{roleId},#{createdTime},#{updatedTime},#{createdBy},#{updatedby})
+
+    </insert>
+
+<!--    删除角色    public void deleteRole(Integer id);    -->
+    <delete id="deleteRole" parameterType="int">
+        delete from roles where id=#{id}
+    </delete>
+</mapper>
