@@ -41,4 +41,9 @@
 
 
 
+<!--    根据id查询资源分类信息-->
+    <select id="findResourceCategoryById" parameterType="int" resultType="com.lagou.domain.ResourceCategory">
+        select * from resource_category where id = #{id}
+    </select>
+
 </mapper>

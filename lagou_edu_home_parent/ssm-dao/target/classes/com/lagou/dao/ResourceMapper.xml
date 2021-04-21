@@ -21,12 +21,12 @@
         </where>
     </select>
 
-<!--    新增资源-->
+<!--    新增资源  （自行完成）-->
     <insert id="saveResource" parameterType="com.lagou.domain.Resource">
         insert into resource (name,url,category_id,description,created_time,updated_time,created_by,updated_by)
         values (#{name},#{url},#{categoryId},#{description},#{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
     </insert>
-<!--    修改资源-->
+<!--    修改资源  （自行完成）-->
     <update id="updateResource" parameterType="com.lagou.domain.Resource">
         UPDATE resource
         <trim prefix="SET" suffixOverrides=",">
@@ -49,10 +49,22 @@
 
     </update>
 
-<!--    删除资源-->
+<!--    删除资源  （自行完成）-->
 
     <delete id="deleteResource" parameterType="int">
         delete from resource where id=#{id}
     </delete>
+
+<!--作业接口-->
+    <!-- 获取当前角色拥有的 资源信息   public List<Resource> findResourceListByRoleId(Integer id);-->
+    <select id="findResourceListByRoleId" parameterType="int" resultType="com.lagou.domain.Resource">
+        SELECT
+        rc.id,rc.name,rc.url,rc.category_id,rc.description,rc.created_time,rc.updated_time,rc.created_by,rc.updated_by
+        FROM
+        roles r
+        INNER JOIN role_resource_relation rrr ON r.id = rrr.role_id
+        INNER JOIN resource rc ON rrr.resource_id = rc.id where r.id = #{roelId}
+    </select>
+
 
 </mapper>

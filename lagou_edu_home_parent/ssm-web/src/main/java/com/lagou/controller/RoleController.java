@@ -2,15 +2,13 @@ package com.lagou.controller;
 
 
 import com.lagou.domain.*;
-import com.lagou.service.MenuService;
-import com.lagou.service.ResourceCategoryService;
-import com.lagou.service.ResourceService;
-import com.lagou.service.RoleService;
+import com.lagou.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.ref.PhantomReference;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,8 +25,8 @@ public class RoleController {
     @Autowired
     private ResourceService resourceService;
 
-//    @Autowired
-//    private RoleResourceRelationService roleResourceRelationService;
+    @Autowired
+    private RoleResourceRelationService roleResourceRelationService;
 
     @Autowired
     private ResourceCategoryService resourceCategoryService;
@@ -127,11 +125,16 @@ public class RoleController {
     }
 
 
-
-    //获取角色
+    /**
+     * 根据角色id查询资源信息
+     * @param roleId
+     * @return
+     */
     @RequestMapping("/findResourceListByRoleId")
     public ResponseResult findResourceListByRoleId(Integer roleId){
+        //获取资源信息
         List<Resource> resourceList =resourceService.findResourceListByRoleId(roleId);
+        //获取资源分类信息
         ResourceCategory categoryById = resourceCategoryService.findResourceCategoryById(resourceList.get(0).getCategoryId());
         //封装信息
         HashMap<Object, Object> map = new HashMap<>();
@@ -142,6 +145,7 @@ public class RoleController {
         map.put("updateDateTime",categoryById.getUpdatedTime());
         map.put("createdBy",categoryById.getCreatedBy());
         map.put("updatedBy",categoryById.getUpdatedBy());
+        //将查询出来的资源列表封装到resourceList 里面 与接口文档对应
         map.put("resourceList",resourceList);
 
         ResponseResult result = new ResponseResult(true, 200, "查询角色成功",map);
@@ -150,6 +154,17 @@ public class RoleController {
     }
 
 
+    /**
+     *  为角色分配资源
+     */
+    @RequestMapping("/roleContextResource")
+    public ResponseResult roleContextResource(@RequestBody RoleResourceRelationVO roleResourceRelationVO, HttpServletRequest httpServletRequest){
 
+        roleResourceRelationVO.setPerson("system");
+        roleResourceRelationService.saveRoleResourceRelation(roleResourceRelationVO);
+        ResponseResult result = new ResponseResult(true, 200, "为角色分配成功", null);
+        return result;
+        /*return null;*/
+    }
 
 }
