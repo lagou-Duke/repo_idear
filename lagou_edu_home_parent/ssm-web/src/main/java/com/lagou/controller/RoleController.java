@@ -1,11 +1,10 @@
 package com.lagou.controller;
 
 
-import com.lagou.domain.Menu;
-import com.lagou.domain.ResponseResult;
-import com.lagou.domain.Role;
-import com.lagou.domain.RoleMenuVo;
+import com.lagou.domain.*;
 import com.lagou.service.MenuService;
+import com.lagou.service.ResourceCategoryService;
+import com.lagou.service.ResourceService;
 import com.lagou.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +23,15 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private ResourceService resourceService;
+
+//    @Autowired
+//    private RoleResourceRelationService roleResourceRelationService;
+
+    @Autowired
+    private ResourceCategoryService resourceCategoryService;
 
     @RequestMapping("/findAllRole")
     public ResponseResult findAllRole(Role role){
@@ -120,7 +128,26 @@ public class RoleController {
 
 
 
+    //获取角色
+    @RequestMapping("/findResourceListByRoleId")
+    public ResponseResult findResourceListByRoleId(Integer roleId){
+        List<Resource> resourceList =resourceService.findResourceListByRoleId(roleId);
+        ResourceCategory categoryById = resourceCategoryService.findResourceCategoryById(resourceList.get(0).getCategoryId());
+        //封装信息
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put("id",categoryById.getId());
+        map.put("name",categoryById.getName());
+        map.put("sort",categoryById.getSort());
+        map.put("createdDateTime",categoryById.getCreatedTime());
+        map.put("updateDateTime",categoryById.getUpdatedTime());
+        map.put("createdBy",categoryById.getCreatedBy());
+        map.put("updatedBy",categoryById.getUpdatedBy());
+        map.put("resourceList",resourceList);
 
+        ResponseResult result = new ResponseResult(true, 200, "查询角色成功",map);
+        return result;
+
+    }
 
 
 

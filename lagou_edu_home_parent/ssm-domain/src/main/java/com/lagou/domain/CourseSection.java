@@ -40,6 +40,8 @@ public class CourseSection {
     //课时集合
     private List<CourseLesson> lessonList;
 
+
+
     public List<CourseLesson> getLessonList() {
         return lessonList;
     }

@@ -31,4 +31,10 @@ public interface ResourceCategoryMapper {
      * 删除资源分类
      */
     public void deleteResourceCategory(Integer id);
+
+
+    /**
+     * 根据id查询资源分类信息
+     */
+    public ResourceCategory findResourceCategoryById(Integer id);
 }

@@ -35,4 +35,13 @@ public interface ResourceMapper {
      */
     public void deleteResource(Integer id);
 
+
+
+    /** 作业接口
+     * 获取当前角色拥有的 资源信息
+     * @param id
+     * @return
+     */
+    public List<Resource> findResourceListByRoleId(Integer id);
+
 }

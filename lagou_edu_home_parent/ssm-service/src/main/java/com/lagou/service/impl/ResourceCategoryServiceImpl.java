@@ -66,4 +66,14 @@ public class ResourceCategoryServiceImpl implements ResourceCategoryService {
     }
 
 
+    /**
+     * 根据id查询资源分类信息
+     */
+    @Override
+    public ResourceCategory findResourceCategoryById(Integer id) {
+        ResourceCategory resourceCategory=resourceCategoryMapper.findResourceCategoryById(id);
+        return resourceCategory;
+    }
+
+
 }

@@ -74,4 +74,16 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
 
+    /**
+     * 获取当前角色拥有的 资源信息
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Resource> findResourceListByRoleId(Integer id) {
+        List<Resource> list=resourceMapper.findResourceListByRoleId(id);
+        return list;
+    }
+
+
 }

@@ -34,4 +34,9 @@ public interface ResourceCategoryService {
 
 
 
+    /**
+     * 根据id查询资源分类信息
+     */
+    public ResourceCategory findResourceCategoryById(Integer id);
+
 }
