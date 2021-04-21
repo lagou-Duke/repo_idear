@@ -29,9 +29,37 @@ public class ResourceCategoryController {
     public ResponseResult findAllResourceCategory(){
 
         List<ResourceCategory> category = resourceCategoryService.findAllResourceCategory();
-        return new ResponseResult(true,200,"响应成 功",category);
+        return new ResponseResult(true,200,"响应成功",category);
     }
 
+    /**
+     * 添加或者修改资源分类
+     */
 
+    @RequestMapping("/saveOrUpdateResourceCategory")
+    public ResponseResult saveOrUpdateResourceCategory(@RequestBody ResourceCategory resourceCategory){
+
+        if(resourceCategory.getId()==null){
+            //没有id  就是新增
+            resourceCategoryService.saveResourceCategory(resourceCategory);
+            return new ResponseResult(true,200,"新增成功",null);
+            //有id  就是修改
+        }else {
+            resourceCategoryService.updateResourceCategory(resourceCategory);
+            return new ResponseResult(true,200,"修改成功",null);
+        }
+
+    }
+    /**
+     * 删除资源分类
+     */
+    @RequestMapping("/deleteResourceCategory")
+    public ResponseResult deleteResourceCategory(Integer id){
+
+
+        resourceCategoryService.deleteResourceCategory(id);
+        ResponseResult result = new ResponseResult(true, 200, "删除成功！", null);
+        return result;
+    }
 
 }
